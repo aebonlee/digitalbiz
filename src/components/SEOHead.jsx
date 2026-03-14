@@ -21,8 +21,8 @@ const SEOHead = ({ title, description, path = '', ogImage, noindex = false }) =>
       <meta property="og:description" content={desc} />
       <meta property="og:url" content={`${BASE}${path}`} />
       <meta property="og:image" content={image} />
-      <meta property="og:image:width" content="400" />
-      <meta property="og:image:height" content="302" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content="Digital Biz 전략세미나" />
       <meta property="og:locale" content="ko_KR" />
       <meta name="twitter:card" content="summary_large_image" />
