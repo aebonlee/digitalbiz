@@ -20,6 +20,7 @@ const getSupabase = () => {
 };
 
 const POSTS_PER_PAGE = 10;
+const SITE_DOMAIN = window.location.hostname;
 
 export const getPosts = async (page = 1, category = null) => {
   const client = getSupabase();
@@ -28,6 +29,7 @@ export const getPosts = async (page = 1, category = null) => {
   let query = client
     .from('posts')
     .select('*', { count: 'exact' })
+    .eq('site_domain', SITE_DOMAIN)
     .order('created_at', { ascending: false });
 
   if (category) {
@@ -72,7 +74,7 @@ export const createPost = async (postData) => {
 
   const { data, error } = await client
     .from('posts')
-    .insert(postData)
+    .insert({ ...postData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -130,7 +132,7 @@ export const createComment = async (commentData) => {
 
   const { data, error } = await client
     .from('comments')
-    .insert(commentData)
+    .insert({ ...commentData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -159,6 +161,7 @@ export const searchPosts = async (query) => {
   const { data, error } = await client
     .from('posts')
     .select('id, title, author_name, created_at')
+    .eq('site_domain', SITE_DOMAIN)
     .or(`title.ilike.${pattern},content.ilike.${pattern}`)
     .order('created_at', { ascending: false })
     .limit(5);
@@ -178,6 +181,7 @@ export const getLectures = async () => {
   const { data, error } = await client
     .from('lectures')
     .select('*')
+    .eq('site_domain', SITE_DOMAIN)
     .eq('is_published', true)
     .order('week_number', { ascending: true });
 
@@ -213,7 +217,7 @@ export const createLecture = async (lectureData) => {
 
   const { data, error } = await client
     .from('lectures')
-    .insert(lectureData)
+    .insert({ ...lectureData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -293,6 +297,7 @@ export const getGalleryItems = async (page = 1, category = null) => {
   let query = client
     .from('gallery')
     .select('*', { count: 'exact' })
+    .eq('site_domain', SITE_DOMAIN)
     .order('created_at', { ascending: false });
 
   if (category) {
@@ -337,7 +342,7 @@ export const createGalleryItem = async (itemData) => {
 
   const { data, error } = await client
     .from('gallery')
-    .insert(itemData)
+    .insert({ ...itemData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -403,7 +408,7 @@ export const createGalleryComment = async (commentData) => {
 
   const { data, error } = await client
     .from('gallery_comments')
-    .insert(commentData)
+    .insert({ ...commentData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -437,6 +442,7 @@ export const getPortfolios = async (page = 1) => {
   const { data, error, count } = await client
     .from('portfolio')
     .select('*', { count: 'exact' })
+    .eq('site_domain', SITE_DOMAIN)
     .order('created_at', { ascending: false })
     .range(from, to);
 
@@ -472,7 +478,7 @@ export const createPortfolio = async (portfolioData) => {
 
   const { data, error } = await client
     .from('portfolio')
-    .insert(portfolioData)
+    .insert({ ...portfolioData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -538,7 +544,7 @@ export const createPortfolioComment = async (commentData) => {
 
   const { data, error } = await client
     .from('portfolio_comments')
-    .insert(commentData)
+    .insert({ ...commentData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -569,6 +575,7 @@ export const getWebsites = async (page = 1, category = null) => {
   let query = client
     .from('websites')
     .select('*', { count: 'exact' })
+    .eq('site_domain', SITE_DOMAIN)
     .order('created_at', { ascending: false });
 
   if (category) {
@@ -613,7 +620,7 @@ export const createWebsite = async (itemData) => {
 
   const { data, error } = await client
     .from('websites')
-    .insert(itemData)
+    .insert({ ...itemData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 
@@ -679,7 +686,7 @@ export const createWebsiteComment = async (commentData) => {
 
   const { data, error } = await client
     .from('websites_comments')
-    .insert(commentData)
+    .insert({ ...commentData, site_domain: SITE_DOMAIN })
     .select()
     .single();
 

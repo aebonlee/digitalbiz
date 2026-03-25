@@ -21,6 +21,12 @@ export const AuthProvider = ({ children }) => {
       const updates = {};
       if (!p.signup_domain) updates.signup_domain = window.location.hostname;
       if (!p.role || p.role === 'user') updates.role = 'member';
+      // 현재 도메인이 visited_sites에 없으면 자동 추가
+      const currentDomain = window.location.hostname;
+      const sites = Array.isArray(p.visited_sites) ? p.visited_sites : [];
+      if (!sites.includes(currentDomain)) {
+        updates.visited_sites = [...sites, currentDomain];
+      }
       if (Object.keys(updates).length > 0) {
         try {
           const updated = await updateProfile(authUser.id, updates);
@@ -71,6 +77,15 @@ export const AuthProvider = ({ children }) => {
       setUser(u);
       if (u) {
         loadProfile(u);
+        if (event === 'SIGNED_IN') {
+          const c = getSupabase();
+          if (c) {
+            c.from('user_profiles')
+              .update({ last_sign_in_at: new Date().toISOString() })
+              .eq('id', u.id)
+              .then(() => {});
+          }
+        }
       } else {
         setProfile(null);
       }
