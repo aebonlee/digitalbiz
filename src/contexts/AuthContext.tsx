@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import getSupabase, { updateLastLogin } from '../utils/supabase';
-import { getProfile, updateProfile, signOut as authSignOut } from '../utils/auth';
+import { getProfile, updateProfile, signOut as authSignOut, signInWithGoogle, signInWithKakao } from '../utils/auth';
 import { ADMIN_EMAILS } from '../config/admin';
 
 interface UserProfile {
@@ -32,6 +32,8 @@ interface AuthContextValue {
   isLoggedIn: boolean;
   isAdmin: boolean;
   signOut: () => Promise<void>;
+  signInWithGoogle: typeof signInWithGoogle;
+  signInWithKakao: typeof signInWithKakao;
   refreshProfile: () => Promise<void>;
   accountBlock: AccountBlock | null;
   clearAccountBlock: () => void;
@@ -169,6 +171,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isLoggedIn,
       isAdmin,
       signOut,
+      signInWithGoogle,
+      signInWithKakao,
       refreshProfile,
       accountBlock,
       clearAccountBlock: () => setAccountBlock(null),
