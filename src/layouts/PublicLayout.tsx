@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthGuard from '../components/AuthGuard';
+import AdminGuard from '../components/AdminGuard';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { LicenseProvider } from '../components/LicenseGuard';
@@ -58,6 +59,7 @@ const Lectures = lazy(() => import('../pages/Lectures'));
 const LectureDetail = lazy(() => import('../pages/LectureDetail'));
 const LectureWrite = lazy(() => import('../pages/LectureWrite'));
 const Admin = lazy(() => import('../pages/Admin'));
+const AdminDashboard = lazy(() => import('../pages/admin/AdminDashboard'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 const Loading = () => (
@@ -154,6 +156,7 @@ const PublicLayout = () => {
 
             {/* Admin */}
             <Route path="/admin" element={<AuthGuard><Admin /></AuthGuard>} />
+            <Route path="/admin/dashboard/*" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
 
             {/* Legacy redirects */}
             <Route path="/board" element={<Navigate to="/community/board" replace />} />
