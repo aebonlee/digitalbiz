@@ -3,6 +3,7 @@ import getSupabase, { updateLastLogin, setSharedSession, getSharedSession, clear
 import { getProfile, updateProfile, signOut as authSignOut, signInWithGoogle, signInWithKakao } from '../utils/auth';
 import { ADMIN_EMAILS } from '../config/admin';
 import { useIdleTimeout } from '../hooks/useIdleTimeout';
+import ProfileCompleteModal from '../components/ProfileCompleteModal';
 
 interface UserProfile {
   id: string;
@@ -177,6 +178,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   ].filter((e): e is string => typeof e === 'string').map((e) => e.toLowerCase());
   const isAdmin = allEmails.some((e) => ADMIN_EMAILS.includes(e));
   const isLoggedIn = !!user;
+  const needsProfileCompletion = isLoggedIn && !!profile && (!profile.name || !profile.phone);
 
 
   // 10분 무동작 세션 타임아웃
@@ -203,6 +205,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       clearAccountBlock: () => setAccountBlock(null),
     }}>
       {children}
+      {needsProfileCompletion && user && (
+        <ProfileCompleteModal user={user as any} onComplete={refreshProfile} />
+      )}
     </AuthContext.Provider>
   );
 };

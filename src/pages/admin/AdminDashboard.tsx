@@ -54,7 +54,7 @@ export default function AdminDashboard() {
     if (!client) return;
     (async () => {
       const [m, p, l, g] = await Promise.all([
-        client.from('user_profiles').select('id', { count: 'exact', head: true }),
+        client.from('user_profiles').select('id', { count: 'exact', head: true }).contains('visited_sites', [window.location.hostname]),
         client.from('digb_posts').select('id', { count: 'exact', head: true }),
         client.from('digb_lectures').select('id', { count: 'exact', head: true }),
         client.from('digb_gallery').select('id', { count: 'exact', head: true }),
